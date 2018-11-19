@@ -1,4 +1,5 @@
 # coding: utf-8
+#%matplotlib inline
 
 # 相関比の算出
 def corr_ratio(df, col_c, col_n):
@@ -91,7 +92,6 @@ def getdummy_crossagg_cramers_v(df, colname_x, col_y):
 def crossagg_and_heatmap(df, colname_x, colname_y, file):
     import seaborn as sns
     import matplotlib.pyplot as plt
-    %matplotlib inline
 
     tmp = pd.crosstab(index=df[colname_y], columns=df[colname_x])
     plt.figure(figsize=(len(tmp.index)*2, 5))
@@ -109,7 +109,6 @@ def crossagg_and_heatmap(df, colname_x, colname_y, file):
 def violin(df, colname_x, col_y, file):
     import seaborn as sns
     import matplotlib.pyplot as plt
-    %matplotlib inline
     
     onehot = pd.get_dummies(df[colname_x])
     colnames = onehot.columns
