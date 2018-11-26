@@ -22,7 +22,9 @@ def corr_ratio(df, col_c, col_n):
     means_by_class = agg_by_class / count_by_class
 
     # 各レコードのクラス平均に対する偏差平方和の合計
-    sw = df.apply(lambda row: math.pow(row[col_n] - means_by_class.T[row[col_c]], 2), axis=1).sum()
+#    sw = df.apply(lambda row: math.pow(row[col_n] - means_by_class.T[row[col_c]], 2), axis=1).sum()
+    tmp = df.merge(means_by_class, how="left", left_on="item", right_index=True)
+    sw = np.power(tmp[col_n+"_x"] - tmp[col_n+"_y"], 2).sum()
 
     #-------------
     # 級間変動 Sb
@@ -32,8 +34,12 @@ def corr_ratio(df, col_c, col_n):
     mean = df[col_n].mean()
 
     # 各クラス平均の全体平均に対する偏差の重み付き平方和
-    tmp = (means_by_class - mean).apply(lambda row: pd.Series(math.pow(row, 2)), axis=1)
+#    tmp = (means_by_class - mean).apply(lambda row: pd.Series(math.pow(row, 2)), axis=1)
+#    tmp.columns = [col_n]
+#    sb = (tmp * count_by_class).sum()
+    tmp = means_by_class - mean
     tmp.columns = [col_n]
+    tmp[col_n] = np.power(tmp[col_n], 2)
     sb = (tmp * count_by_class).sum()
     
     #-------------
